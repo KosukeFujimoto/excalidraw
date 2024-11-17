@@ -1521,6 +1521,7 @@ class App extends React.Component<AppProps, AppState> {
                       <ExcalidrawActionManagerContext.Provider
                         value={this.actionManager}
                       >
+                        {/* Leftside menu */}
                         <LayerUI
                           canvas={this.canvas}
                           appState={this.state}
