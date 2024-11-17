@@ -127,7 +127,7 @@ export const SelectedShapeActions = ({
     targetElements.length === 1 &&
     isLinearElement(targetElements[0]) &&
     !isElbowArrow(targetElements[0]);
-
+  //TODO: this needs to be different for architecture
   return (
     <div className="panelColumn">
       <div>
