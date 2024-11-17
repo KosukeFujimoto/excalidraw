@@ -1,5 +1,18 @@
+import clsx from "clsx";
 import { useState } from "react";
+import { actionToggleZenMode } from "../actions";
 import type { ActionManager } from "../actions/manager";
+import { trackEvent } from "../analytics";
+import {
+  shouldAllowVerticalAlign,
+  suppportsHorizontalAlign,
+} from "../element/textElement";
+import {
+  hasBoundTextElement,
+  isElbowArrow,
+  isLinearElement,
+  isTextElement,
+} from "../element/typeChecks";
 import type {
   ExcalidrawElement,
   ExcalidrawElementType,
@@ -7,7 +20,6 @@ import type {
   NonDeletedSceneElementsMap,
 } from "../element/types";
 import { t } from "../i18n";
-import { useDevice } from "./App";
 import {
   canChangeRoundness,
   canHaveArrowheads,
@@ -16,40 +28,28 @@ import {
   hasStrokeStyle,
   hasStrokeWidth,
 } from "../scene";
+import { hasStrokeColor, toolIsArrow } from "../scene/comparisons";
 import { SHAPES } from "../shapes";
 import type { AppClassProperties, AppProps, UIAppState, Zoom } from "../types";
 import { capitalizeString, isTransparent } from "../utils";
+import { useDevice } from "./App";
 import Stack from "./Stack";
 import { ToolButton } from "./ToolButton";
-import { hasStrokeColor, toolIsArrow } from "../scene/comparisons";
-import { trackEvent } from "../analytics";
-import {
-  hasBoundTextElement,
-  isElbowArrow,
-  isLinearElement,
-  isTextElement,
-} from "../element/typeChecks";
-import clsx from "clsx";
-import { actionToggleZenMode } from "../actions";
 import { Tooltip } from "./Tooltip";
-import {
-  shouldAllowVerticalAlign,
-  suppportsHorizontalAlign,
-} from "../element/textElement";
 
+import { CLASSES } from "../constants";
+import { useTunnels } from "../context/tunnels";
+import { KEYS } from "../keys";
 import "./Actions.scss";
 import DropdownMenu from "./dropdownMenu/DropdownMenu";
 import {
   EmbedIcon,
   extraToolsIcon,
   frameToolIcon,
-  mermaidLogoIcon,
   laserPointerToolIcon,
   MagicIcon,
+  mermaidLogoIcon,
 } from "./icons";
-import { KEYS } from "../keys";
-import { useTunnels } from "../context/tunnels";
-import { CLASSES } from "../constants";
 
 export const canChangeStrokeColor = (
   appState: UIAppState,

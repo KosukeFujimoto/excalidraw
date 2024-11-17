@@ -1,7 +1,7 @@
-import cssVariables from "./css/variables.module.scss";
-import type { AppProps, AppState } from "./types";
-import type { ExcalidrawElement, FontFamilyValues } from "./element/types";
 import { COLOR_PALETTE } from "./colors";
+import cssVariables from "./css/variables.module.scss";
+import type { ExcalidrawElement, FontFamilyValues } from "./element/types";
+import type { AppProps, AppState } from "./types";
 export const isDarwin = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
 export const isWindows = /^Win/.test(navigator.platform);
 export const isAndroid = /\b(android)\b/i.test(navigator.userAgent);
@@ -399,6 +399,7 @@ export const TOOL_TYPE = {
   arrow: "arrow",
   line: "line",
   freedraw: "freedraw",
+  cloud: "cloud",
   text: "text",
   image: "image",
   eraser: "eraser",

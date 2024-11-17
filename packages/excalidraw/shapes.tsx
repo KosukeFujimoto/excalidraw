@@ -127,7 +127,7 @@ export const SHAPES = [
   //TODO: Custom Icon can be added here
   {
     icon: CloudIcon,
-    value: "rectangle",
+    value: "cloud",
     key: KEYS.C,
     numericKey: KEYS["2"],
     fillable: false,
