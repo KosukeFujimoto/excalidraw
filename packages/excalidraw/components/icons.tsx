@@ -8,10 +8,10 @@
 
 import React from "react";
 
-import oc from "open-color";
 import clsx from "clsx";
-import type { Theme } from "../element/types";
+import oc from "open-color";
 import { THEME } from "../constants";
+import type { Theme } from "../element/types";
 
 export const iconFillColor = (theme: Theme) => "var(--icon-fill-color)";
 
@@ -372,6 +372,15 @@ export const EraserIcon = createIcon(
     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
     <path d="M19 20h-10.5l-4.21 -4.3a1 1 0 0 1 0 -1.41l10 -10a1 1 0 0 1 1.41 0l5 5a1 1 0 0 1 0 1.41l-9.2 9.3" />
     <path d="M18 13.3l-6.3 -6.3" />
+  </g>,
+  tablerIconProps,
+);
+
+//TODO: Add Icon for Cloud Services
+export const CloudIcon = createIcon(
+  <g strokeWidth="1.5">
+    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+    <rect x="4" y="4" width="16" height="16" rx="2"></rect>
   </g>,
   tablerIconProps,
 );
