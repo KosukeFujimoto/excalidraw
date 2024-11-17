@@ -85,6 +85,7 @@ export const canChangeBackgroundColor = (
   );
 };
 
+//TODO: Modify this for custom Action for Architecture
 export const SelectedShapeActions = ({
   appState,
   elementsMap,
