@@ -51,6 +51,7 @@ import { ShapeCache } from "./scene/ShapeCache";
 import type { NormalizedZoomValue, Zoom } from "./types";
 import { invariant } from "./utils";
 
+//TODO: Add AWS/GCP/Azure Icon
 export const SHAPES = [
   {
     icon: SelectionIcon,
