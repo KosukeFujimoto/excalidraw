@@ -123,6 +123,14 @@ export const SHAPES = [
     numericKey: KEYS["0"],
     fillable: false,
   },
+  //TODO: Custom Icon can be added here
+  // {
+  //   icon: RectangleIcon,
+  //   value: "rectangle",
+  //   key: KEYS.R,
+  //   numericKey: KEYS["2"],
+  //   fillable: true,
+  // },
 ] as const;
 
 export const findShapeByKey = (key: string) => {
@@ -135,6 +143,7 @@ export const findShapeByKey = (key: string) => {
           : (shape.key as readonly string[]).includes(key)))
     );
   });
+  console.log(shape);
   return shape?.value || null;
 };
 
