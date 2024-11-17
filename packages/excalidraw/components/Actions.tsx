@@ -100,7 +100,7 @@ export const SelectedShapeActions = ({
 
   //TODO: this needs to be different for architecture
   if (appState.activeTool.type === "cloud") {
-    return <ServiceList appState={appState} targetElements={targetElements} />;
+    return <ServiceList />;
   }
 
   let isSingleElementBoundContainer = false;
@@ -260,6 +260,7 @@ export const SelectedShapeActions = ({
   );
 };
 
+//This is top menubar
 export const ShapesSwitcher = ({
   activeTool,
   appState,
