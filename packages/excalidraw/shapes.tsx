@@ -128,9 +128,9 @@ export const SHAPES = [
   {
     icon: CloudIcon,
     value: "rectangle",
-    key: KEYS.R,
+    key: KEYS.C,
     numericKey: KEYS["2"],
-    fillable: true,
+    fillable: false,
   },
 ] as const;
 
