@@ -1,15 +1,16 @@
 import React from "react";
 import {
-  loginIcon,
   ExcalLogo,
   eyeIcon,
+  loginIcon,
 } from "../../packages/excalidraw/components/icons";
 import type { Theme } from "../../packages/excalidraw/element/types";
 import { MainMenu } from "../../packages/excalidraw/index";
-import { isExcalidrawPlusSignedUser } from "../app_constants";
 import { LanguageList } from "../app-language/LanguageList";
+import { isExcalidrawPlusSignedUser } from "../app_constants";
 import { saveDebugState } from "./DebugCanvas";
 
+//TODO: Update this menu for blueprint application
 export const AppMainMenu: React.FC<{
   onCollabDialogOpen: () => any;
   isCollaborating: boolean;
