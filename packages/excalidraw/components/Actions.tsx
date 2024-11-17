@@ -41,6 +41,7 @@ import { CLASSES } from "../constants";
 import { useTunnels } from "../context/tunnels";
 import { KEYS } from "../keys";
 import "./Actions.scss";
+import { ServiceList } from "./ArchitectureList";
 import DropdownMenu from "./dropdownMenu/DropdownMenu";
 import {
   EmbedIcon,
@@ -97,6 +98,11 @@ export const SelectedShapeActions = ({
 }) => {
   const targetElements = getTargetElements(elementsMap, appState);
 
+  //TODO: this needs to be different for architecture
+  if (appState.activeTool.type === "cloud") {
+    return <ServiceList appState={appState} targetElements={targetElements} />;
+  }
+
   let isSingleElementBoundContainer = false;
   if (
     targetElements.length === 2 &&
@@ -127,7 +133,7 @@ export const SelectedShapeActions = ({
     targetElements.length === 1 &&
     isLinearElement(targetElements[0]) &&
     !isElbowArrow(targetElements[0]);
-  //TODO: this needs to be different for architecture
+
   return (
     <div className="panelColumn">
       <div>
