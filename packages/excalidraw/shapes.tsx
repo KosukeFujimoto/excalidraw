@@ -21,7 +21,6 @@ import {
   ArrowIcon,
   CloudIcon,
   DiamondIcon,
-  EllipseIcon,
   EraserIcon,
   FreedrawIcon,
   ImageIcon,
@@ -73,13 +72,6 @@ export const SHAPES = [
     value: "diamond",
     key: KEYS.D,
     numericKey: KEYS["3"],
-    fillable: true,
-  },
-  {
-    icon: EllipseIcon,
-    value: "ellipse",
-    key: KEYS.O,
-    numericKey: KEYS["4"],
     fillable: true,
   },
   {
