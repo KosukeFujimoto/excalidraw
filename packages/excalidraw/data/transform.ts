@@ -15,6 +15,7 @@ import { bindLinearElement } from "../element/binding";
 import type { ElementConstructorOpts } from "../element/newElement";
 import {
   newArrowElement,
+  newCloudElement,
   newFrameElement,
   newImageElement,
   newMagicFrameElement,
@@ -597,6 +598,14 @@ export const convertToExcalidrawElements = (
           ...element,
         });
 
+        break;
+      }
+      case "cloud": {
+        excalidrawElement = newCloudElement({
+          width: DEFAULT_DIMENSION,
+          height: DEFAULT_DIMENSION,
+          ...element,
+        });
         break;
       }
       case "frame": {
