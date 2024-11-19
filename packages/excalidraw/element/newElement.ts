@@ -1,42 +1,5 @@
-import type {
-  ExcalidrawElement,
-  ExcalidrawImageElement,
-  ExcalidrawTextElement,
-  ExcalidrawLinearElement,
-  ExcalidrawGenericElement,
-  NonDeleted,
-  TextAlign,
-  GroupId,
-  VerticalAlign,
-  Arrowhead,
-  ExcalidrawFreeDrawElement,
-  FontFamilyValues,
-  ExcalidrawTextContainer,
-  ExcalidrawFrameElement,
-  ExcalidrawEmbeddableElement,
-  ExcalidrawMagicFrameElement,
-  ExcalidrawIframeElement,
-  ElementsMap,
-  ExcalidrawArrowElement,
-} from "./types";
-import {
-  arrayToMap,
-  getFontString,
-  getUpdatedTimestamp,
-  isTestEnv,
-} from "../utils";
-import { randomInteger, randomId } from "../random";
-import { bumpVersion, newElementWith } from "./mutateElement";
-import { getNewGroupIdsForDuplication } from "../groups";
-import type { AppState } from "../types";
 import { getElementAbsoluteCoords } from ".";
-import { getResizedElementAbsoluteCoords } from "./bounds";
-import {
-  measureText,
-  normalizeText,
-  wrapText,
-  getBoundTextMaxWidth,
-} from "./textElement";
+import type { Radians } from "../../math";
 import {
   DEFAULT_ELEMENT_PROPS,
   DEFAULT_FONT_FAMILY,
@@ -45,9 +8,47 @@ import {
   DEFAULT_VERTICAL_ALIGN,
   VERTICAL_ALIGN,
 } from "../constants";
-import type { MarkOptional, Merge, Mutable } from "../utility-types";
 import { getLineHeight } from "../fonts";
-import type { Radians } from "../../math";
+import { getNewGroupIdsForDuplication } from "../groups";
+import { randomId, randomInteger } from "../random";
+import type { AppState } from "../types";
+import type { MarkOptional, Merge, Mutable } from "../utility-types";
+import {
+  arrayToMap,
+  getFontString,
+  getUpdatedTimestamp,
+  isTestEnv,
+} from "../utils";
+import { getResizedElementAbsoluteCoords } from "./bounds";
+import { bumpVersion, newElementWith } from "./mutateElement";
+import {
+  getBoundTextMaxWidth,
+  measureText,
+  normalizeText,
+  wrapText,
+} from "./textElement";
+import type {
+  Arrowhead,
+  ElementsMap,
+  ExcalidrawArrowElement,
+  ExcalidrawCloudElement,
+  ExcalidrawElement,
+  ExcalidrawEmbeddableElement,
+  ExcalidrawFrameElement,
+  ExcalidrawFreeDrawElement,
+  ExcalidrawGenericElement,
+  ExcalidrawIframeElement,
+  ExcalidrawImageElement,
+  ExcalidrawLinearElement,
+  ExcalidrawMagicFrameElement,
+  ExcalidrawTextContainer,
+  ExcalidrawTextElement,
+  FontFamilyValues,
+  GroupId,
+  NonDeleted,
+  TextAlign,
+  VerticalAlign,
+} from "./types";
 
 export type ElementConstructorOpts = MarkOptional<
   Omit<ExcalidrawGenericElement, "id" | "type" | "isDeleted" | "updated">,
@@ -481,6 +482,25 @@ export const newImageElement = (
 ): NonDeleted<ExcalidrawImageElement> => {
   return {
     ..._newElementBase<ExcalidrawImageElement>("image", opts),
+    // in the future we'll support changing stroke color for some SVG elements,
+    // and `transparent` will likely mean "use original colors of the image"
+    strokeColor: "transparent",
+    status: opts.status ?? "pending",
+    fileId: opts.fileId ?? null,
+    scale: opts.scale ?? [1, 1],
+  };
+};
+
+export const newCloudElement = (
+  opts: {
+    type: ExcalidrawCloudElement["type"];
+    status?: ExcalidrawCloudElement["status"];
+    fileId?: ExcalidrawCloudElement["fileId"];
+    scale?: ExcalidrawCloudElement["scale"];
+  } & ElementConstructorOpts,
+): NonDeleted<ExcalidrawCloudElement> => {
+  return {
+    ..._newElementBase<ExcalidrawCloudElement>("cloud", opts),
     // in the future we'll support changing stroke color for some SVG elements,
     // and `transparent` will likely mean "use original colors of the image"
     strokeColor: "transparent",

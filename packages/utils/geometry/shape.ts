@@ -12,6 +12,27 @@
  * to pure shapes
  */
 
+import { pointsOnBezierCurves } from "points-on-curve";
+import type { Drawable, Op } from "roughjs/bin/core";
+import { getElementAbsoluteCoords } from "../../excalidraw/element";
+import type {
+  ElementsMap,
+  ExcalidrawBindableElement,
+  ExcalidrawCloudElement,
+  ExcalidrawDiamondElement,
+  ExcalidrawElement,
+  ExcalidrawEllipseElement,
+  ExcalidrawEmbeddableElement,
+  ExcalidrawFrameLikeElement,
+  ExcalidrawFreeDrawElement,
+  ExcalidrawIframeElement,
+  ExcalidrawImageElement,
+  ExcalidrawLinearElement,
+  ExcalidrawRectangleElement,
+  ExcalidrawSelectionElement,
+  ExcalidrawTextElement,
+} from "../../excalidraw/element/types";
+import { invariant } from "../../excalidraw/utils";
 import type { Curve, LineSegment, Polygon, Radians } from "../../math";
 import {
   curve,
@@ -32,26 +53,6 @@ import {
   type GlobalPoint,
   type LocalPoint,
 } from "../../math";
-import { getElementAbsoluteCoords } from "../../excalidraw/element";
-import type {
-  ElementsMap,
-  ExcalidrawBindableElement,
-  ExcalidrawDiamondElement,
-  ExcalidrawElement,
-  ExcalidrawEllipseElement,
-  ExcalidrawEmbeddableElement,
-  ExcalidrawFrameLikeElement,
-  ExcalidrawFreeDrawElement,
-  ExcalidrawIframeElement,
-  ExcalidrawImageElement,
-  ExcalidrawLinearElement,
-  ExcalidrawRectangleElement,
-  ExcalidrawSelectionElement,
-  ExcalidrawTextElement,
-} from "../../excalidraw/element/types";
-import { pointsOnBezierCurves } from "points-on-curve";
-import type { Drawable, Op } from "roughjs/bin/core";
-import { invariant } from "../../excalidraw/utils";
 
 // a polyline (made up term here) is a line consisting of other line segments
 // this corresponds to a straight line element in the editor but it could also
@@ -105,6 +106,7 @@ type RectangularElement =
   | ExcalidrawFrameLikeElement
   | ExcalidrawEmbeddableElement
   | ExcalidrawImageElement
+  | ExcalidrawCloudElement
   | ExcalidrawIframeElement
   | ExcalidrawTextElement
   | ExcalidrawSelectionElement;

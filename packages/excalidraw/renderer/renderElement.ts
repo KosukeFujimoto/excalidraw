@@ -1,41 +1,29 @@
-import type {
-  ExcalidrawElement,
-  ExcalidrawTextElement,
-  NonDeletedExcalidrawElement,
-  ExcalidrawFreeDrawElement,
-  ExcalidrawImageElement,
-  ExcalidrawTextElementWithContainer,
-  ExcalidrawFrameLikeElement,
-  NonDeletedSceneElementsMap,
-  ElementsMap,
-} from "../element/types";
+import type { RoughCanvas } from "roughjs/bin/canvas";
+import { getElementAbsoluteCoords } from "../element/bounds";
 import {
-  isTextElement,
-  isLinearElement,
+  hasBoundTextElement,
+  isArrowElement,
   isFreeDrawElement,
   isInitializedImageElement,
-  isArrowElement,
-  hasBoundTextElement,
+  isLinearElement,
   isMagicFrameElement,
+  isTextElement,
 } from "../element/typeChecks";
-import { getElementAbsoluteCoords } from "../element/bounds";
-import type { RoughCanvas } from "roughjs/bin/canvas";
+import type {
+  ElementsMap,
+  ExcalidrawElement,
+  ExcalidrawFrameLikeElement,
+  ExcalidrawFreeDrawElement,
+  ExcalidrawImageElement,
+  ExcalidrawTextElement,
+  ExcalidrawTextElementWithContainer,
+  NonDeletedExcalidrawElement,
+  NonDeletedSceneElementsMap,
+} from "../element/types";
 
-import type {
-  StaticCanvasRenderConfig,
-  RenderableElementsMap,
-  InteractiveCanvasRenderConfig,
-} from "../scene/types";
-import { distance, getFontString, isRTL } from "../utils";
+import type { StrokeOptions } from "perfect-freehand";
+import { getStroke } from "perfect-freehand";
 import rough from "roughjs/bin/rough";
-import type {
-  AppState,
-  StaticCanvasAppState,
-  Zoom,
-  InteractiveCanvasAppState,
-  ElementsPendingErasure,
-  PendingExcalidrawElements,
-} from "../types";
 import { getDefaultAppState } from "../appState";
 import {
   BOUND_TEXT_PADDING,
@@ -44,22 +32,34 @@ import {
   MIME_TYPES,
   THEME,
 } from "../constants";
-import type { StrokeOptions } from "perfect-freehand";
-import { getStroke } from "perfect-freehand";
+import { LinearElementEditor } from "../element/linearElementEditor";
 import {
   getBoundTextElement,
+  getBoundTextMaxHeight,
+  getBoundTextMaxWidth,
   getContainerCoords,
   getContainerElement,
   getLineHeightInPx,
-  getBoundTextMaxHeight,
-  getBoundTextMaxWidth,
 } from "../element/textElement";
-import { LinearElementEditor } from "../element/linearElementEditor";
+import type {
+  InteractiveCanvasRenderConfig,
+  RenderableElementsMap,
+  StaticCanvasRenderConfig,
+} from "../scene/types";
+import type {
+  AppState,
+  ElementsPendingErasure,
+  InteractiveCanvasAppState,
+  PendingExcalidrawElements,
+  StaticCanvasAppState,
+  Zoom,
+} from "../types";
+import { distance, getFontString, isRTL } from "../utils";
 
+import { isRightAngleRads } from "../../math";
+import { getVerticalOffset } from "../fonts";
 import { getContainingFrame } from "../frame";
 import { ShapeCache } from "../scene/ShapeCache";
-import { getVerticalOffset } from "../fonts";
-import { isRightAngleRads } from "../../math";
 import { getCornerRadius } from "../shapes";
 
 // using a stronger invert (100% vs our regular 93%) and saturate
@@ -772,6 +772,7 @@ export const renderElement = (
     case "line":
     case "arrow":
     case "image":
+    case "cloud":
     case "text":
     case "iframe":
     case "embeddable": {

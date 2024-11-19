@@ -144,7 +144,7 @@ export type ExcalidrawImageElement = _ExcalidrawElementBase &
 
 export type ExcalidrawCloudElement = _ExcalidrawElementBase &
   Readonly<{
-    type: "image";
+    type: "cloud";
     fileId: FileId | null;
     /** whether respective file is persisted */
     status: "pending" | "saved" | "error";
@@ -154,6 +154,11 @@ export type ExcalidrawCloudElement = _ExcalidrawElementBase &
 
 export type InitializedExcalidrawImageElement = MarkNonNullable<
   ExcalidrawImageElement,
+  "fileId"
+>;
+
+export type InitializedExcalidrawCloudElement = MarkNonNullable<
+  ExcalidrawCloudElement,
   "fileId"
 >;
 
@@ -188,6 +193,7 @@ export type ExcalidrawFlowchartNodeElement =
 export type ExcalidrawRectanguloidElement =
   | ExcalidrawRectangleElement
   | ExcalidrawImageElement
+  | ExcalidrawCloudElement
   | ExcalidrawTextElement
   | ExcalidrawFreeDrawElement
   | ExcalidrawIframeLikeElement
@@ -259,6 +265,7 @@ export type ExcalidrawBindableElement =
   | ExcalidrawEllipseElement
   | ExcalidrawTextElement
   | ExcalidrawImageElement
+  | ExcalidrawCloudElement
   | ExcalidrawIframeElement
   | ExcalidrawEmbeddableElement
   | ExcalidrawFrameElement

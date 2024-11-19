@@ -1,38 +1,69 @@
 import * as GA from "../../math/ga/ga";
-import * as GAPoint from "../../math/ga/gapoints";
 import * as GADirection from "../../math/ga/gadirections";
 import * as GALine from "../../math/ga/galines";
+import * as GAPoint from "../../math/ga/gapoints";
 import * as GATransform from "../../math/ga/gatransforms";
 
 import type {
+  ElementsMap,
+  ExcalidrawArrowElement,
   ExcalidrawBindableElement,
-  ExcalidrawElement,
-  ExcalidrawRectangleElement,
+  ExcalidrawCloudElement,
   ExcalidrawDiamondElement,
+  ExcalidrawElbowArrowElement,
+  ExcalidrawElement,
   ExcalidrawEllipseElement,
-  ExcalidrawImageElement,
   ExcalidrawFrameLikeElement,
   ExcalidrawIframeLikeElement,
-  NonDeleted,
+  ExcalidrawImageElement,
   ExcalidrawLinearElement,
-  PointBinding,
-  NonDeletedExcalidrawElement,
-  ElementsMap,
-  NonDeletedSceneElementsMap,
-  ExcalidrawTextElement,
-  ExcalidrawArrowElement,
-  OrderedExcalidrawElement,
-  ExcalidrawElbowArrowElement,
-  FixedPoint,
-  SceneElementsMap,
+  ExcalidrawRectangleElement,
   ExcalidrawRectanguloidElement,
+  ExcalidrawTextElement,
+  FixedPoint,
+  NonDeleted,
+  NonDeletedExcalidrawElement,
+  NonDeletedSceneElementsMap,
+  OrderedExcalidrawElement,
+  PointBinding,
+  SceneElementsMap,
 } from "./types";
 
+import type { LocalPoint, Radians } from "../../math";
+import {
+  clamp,
+  lineSegment,
+  point,
+  pointDistanceSq,
+  pointFromPair,
+  pointRotateRads,
+  vectorFromPoint,
+  type GlobalPoint,
+} from "../../math";
+import { isPointOnShape } from "../../utils/collision";
+import { segmentIntersectRectangleElement } from "../../utils/geometry/shape";
+import { KEYS } from "../keys";
+import { getElementAtPosition } from "../scene";
+import type Scene from "../scene/Scene";
+import { aabbForElement, getElementShape, pointInsideBounds } from "../shapes";
+import type { AppState } from "../types";
+import { arrayToMap, tupleToCoors } from "../utils";
 import type { Bounds } from "./bounds";
 import { getCenterForBounds, getElementAbsoluteCoords } from "./bounds";
-import type { AppState } from "../types";
-import { isPointOnShape } from "../../utils/collision";
-import { getElementAtPosition } from "../scene";
+import {
+  compareHeading,
+  HEADING_DOWN,
+  HEADING_LEFT,
+  HEADING_RIGHT,
+  HEADING_UP,
+  headingForPointFromElement,
+  vectorToHeading,
+  type Heading,
+} from "./heading";
+import { LinearElementEditor } from "./linearElementEditor";
+import type { ElementUpdate } from "./mutateElement";
+import { mutateElement } from "./mutateElement";
+import { getBoundTextElement, handleBindTextResize } from "./textElement";
 import {
   isArrowElement,
   isBindableElement,
@@ -45,36 +76,6 @@ import {
   isRectangularElement,
   isTextElement,
 } from "./typeChecks";
-import type { ElementUpdate } from "./mutateElement";
-import { mutateElement } from "./mutateElement";
-import type Scene from "../scene/Scene";
-import { LinearElementEditor } from "./linearElementEditor";
-import { arrayToMap, tupleToCoors } from "../utils";
-import { KEYS } from "../keys";
-import { getBoundTextElement, handleBindTextResize } from "./textElement";
-import { aabbForElement, getElementShape, pointInsideBounds } from "../shapes";
-import {
-  compareHeading,
-  HEADING_DOWN,
-  HEADING_LEFT,
-  HEADING_RIGHT,
-  HEADING_UP,
-  headingForPointFromElement,
-  vectorToHeading,
-  type Heading,
-} from "./heading";
-import type { LocalPoint, Radians } from "../../math";
-import {
-  lineSegment,
-  point,
-  pointRotateRads,
-  type GlobalPoint,
-  vectorFromPoint,
-  pointFromPair,
-  pointDistanceSq,
-  clamp,
-} from "../../math";
-import { segmentIntersectRectangleElement } from "../../utils/geometry/shape";
 
 export type SuggestedBinding =
   | NonDeleted<ExcalidrawBindableElement>
@@ -1363,6 +1364,7 @@ export const distanceToBindableElement = (
   switch (element.type) {
     case "rectangle":
     case "image":
+    case "cloud":
     case "text":
     case "iframe":
     case "embeddable":
@@ -1589,6 +1591,7 @@ const determineFocusPoint = (
   switch (element.type) {
     case "rectangle":
     case "image":
+    case "cloud":
     case "text":
     case "diamond":
     case "iframe":
@@ -1656,6 +1659,7 @@ const getSortedElementLineIntersections = (
   switch (element.type) {
     case "rectangle":
     case "image":
+    case "cloud":
     case "text":
     case "diamond":
     case "iframe":
@@ -1694,6 +1698,7 @@ const getCorners = (
   element:
     | ExcalidrawRectangleElement
     | ExcalidrawImageElement
+    | ExcalidrawCloudElement
     | ExcalidrawDiamondElement
     | ExcalidrawTextElement
     | ExcalidrawIframeLikeElement
@@ -1705,6 +1710,7 @@ const getCorners = (
   switch (element.type) {
     case "rectangle":
     case "image":
+    case "cloud":
     case "text":
     case "iframe":
     case "embeddable":
@@ -1856,6 +1862,7 @@ const findFocusPointForRectangulars = (
   element:
     | ExcalidrawRectangleElement
     | ExcalidrawImageElement
+    | ExcalidrawCloudElement
     | ExcalidrawDiamondElement
     | ExcalidrawTextElement
     | ExcalidrawIframeLikeElement

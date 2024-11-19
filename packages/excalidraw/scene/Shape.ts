@@ -1,19 +1,15 @@
-import type { Point as RoughPoint } from "roughjs/bin/geometry";
+import { simplify } from "points-on-curve";
 import type { Drawable, Options } from "roughjs/bin/core";
 import type { RoughGenerator } from "roughjs/bin/generator";
-import { getDiamondPoints, getArrowheadPoints } from "../element";
-import type { ElementShapes } from "./types";
-import type {
-  ExcalidrawElement,
-  NonDeletedExcalidrawElement,
-  ExcalidrawSelectionElement,
-  ExcalidrawLinearElement,
-  Arrowhead,
-} from "../element/types";
-import { generateFreeDrawShape } from "../renderer/renderElement";
-import { isTransparent, assertNever } from "../utils";
-import { simplify } from "points-on-curve";
+import type { Point as RoughPoint } from "roughjs/bin/geometry";
+import {
+  point,
+  pointDistance,
+  type GlobalPoint,
+  type LocalPoint,
+} from "../../math";
 import { ROUGHNESS } from "../constants";
+import { getArrowheadPoints, getDiamondPoints } from "../element";
 import {
   isElbowArrow,
   isEmbeddableElement,
@@ -21,15 +17,19 @@ import {
   isIframeLikeElement,
   isLinearElement,
 } from "../element/typeChecks";
-import { canChangeRoundness } from "./comparisons";
-import type { EmbedsValidationStatus } from "../types";
-import {
-  point,
-  pointDistance,
-  type GlobalPoint,
-  type LocalPoint,
-} from "../../math";
+import type {
+  Arrowhead,
+  ExcalidrawElement,
+  ExcalidrawLinearElement,
+  ExcalidrawSelectionElement,
+  NonDeletedExcalidrawElement,
+} from "../element/types";
+import { generateFreeDrawShape } from "../renderer/renderElement";
 import { getCornerRadius, isPathALoop } from "../shapes";
+import type { EmbedsValidationStatus } from "../types";
+import { assertNever, isTransparent } from "../utils";
+import { canChangeRoundness } from "./comparisons";
+import type { ElementShapes } from "./types";
 
 const getDashArrayDashed = (strokeWidth: number) => [8, 8 + strokeWidth];
 
@@ -488,6 +488,7 @@ export const _generateElementShape = (
     case "frame":
     case "magicframe":
     case "text":
+    case "cloud":
     case "image": {
       const shape: ElementShapes[typeof element.type] = null;
       // we return (and cache) `null` to make sure we don't regenerate

@@ -124,6 +124,7 @@ export const getElementShape = <Point extends GlobalPoint | LocalPoint>(
     case "magicframe":
     case "embeddable":
     case "image":
+    case "cloud":
     case "iframe":
     case "text":
     case "selection":

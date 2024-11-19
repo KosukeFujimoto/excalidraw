@@ -9,14 +9,14 @@ import type {
 import type {
   AppClassProperties,
   AppState,
-  EmbedsValidationStatus,
-  ElementsPendingErasure,
-  InteractiveCanvasAppState,
-  StaticCanvasAppState,
-  SocketId,
-  UserIdleState,
   Device,
+  ElementsPendingErasure,
+  EmbedsValidationStatus,
+  InteractiveCanvasAppState,
   PendingExcalidrawElements,
+  SocketId,
+  StaticCanvasAppState,
+  UserIdleState,
 } from "../types";
 import type { MakeBrand } from "../utility-types";
 
@@ -142,6 +142,7 @@ export type ElementShapes = {
   arrow: Drawable[];
   line: Drawable[];
   text: null;
+  cloud: null;
   image: null;
   frame: null;
   magicframe: null;

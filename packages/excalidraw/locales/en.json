@@ -292,6 +292,7 @@
     "freedraw": "Freedraw",
     "text": "Text",
     "image": "Image",
+    "cloud": "Cloud",
     "group": "Group",
     "frame": "Frame",
     "magicframe": "Wireframe to code",

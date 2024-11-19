@@ -1,3 +1,4 @@
+import { point, type LocalPoint } from "../../math";
 import {
   DEFAULT_FONT_FAMILY,
   DEFAULT_FONT_SIZE,
@@ -20,10 +21,12 @@ import {
   newTextElement,
 } from "../element/newElement";
 import { measureText, normalizeText } from "../element/textElement";
+import { isArrowElement } from "../element/typeChecks";
 import type {
   ElementsMap,
   ExcalidrawArrowElement,
   ExcalidrawBindableElement,
+  ExcalidrawCloudElement,
   ExcalidrawElement,
   ExcalidrawFrameElement,
   ExcalidrawFreeDrawElement,
@@ -40,6 +43,10 @@ import type {
   TextAlign,
   VerticalAlign,
 } from "../element/types";
+import { getLineHeight } from "../fonts";
+import { syncInvalidIndices } from "../fractionalIndex";
+import { getSizeFromPoints } from "../points";
+import { randomId } from "../random";
 import type { MarkOptional } from "../utility-types";
 import {
   arrayToMap,
@@ -48,12 +55,6 @@ import {
   getFontString,
   toBrandedType,
 } from "../utils";
-import { getSizeFromPoints } from "../points";
-import { randomId } from "../random";
-import { syncInvalidIndices } from "../fractionalIndex";
-import { getLineHeight } from "../fonts";
-import { isArrowElement } from "../element/typeChecks";
-import { point, type LocalPoint } from "../../math";
 
 export type ValidLinearElement = {
   type: "arrow" | "line";
@@ -190,6 +191,12 @@ export type ExcalidrawElementSkeleton =
       y: number;
       fileId: FileId;
     } & Partial<ExcalidrawImageElement>)
+  | ({
+      type: Extract<ExcalidrawCloudElement["type"], "cloud">;
+      x: number;
+      y: number;
+      fileId: FileId;
+    } & Partial<ExcalidrawCloudElement>)
   | ({
       type: "frame";
       children: readonly ExcalidrawElement["id"][];
@@ -490,6 +497,8 @@ class ElementStore {
   };
 }
 
+//TODO: Excalidraw Element Handler
+//This part needs to be updated for architecture
 export const convertToExcalidrawElements = (
   elementsSkeleton: ExcalidrawElementSkeleton[] | null,
   opts?: { regenerateIds: boolean },

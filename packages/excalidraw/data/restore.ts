@@ -253,6 +253,7 @@ const restoreElement = (
         pressures: element.pressures,
       });
     }
+    case "cloud":
     case "image":
       return restoreElementWithProperties(element, {
         status: element.status || "pending",

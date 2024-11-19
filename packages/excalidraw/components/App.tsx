@@ -241,7 +241,7 @@ import {
   isLinearElementType,
   isMagicFrameElement,
   isTextBindableContainer,
-  isUsingAdaptiveRadius,
+  isUsingAdaptiveRadius
 } from "../element/typeChecks";
 import type {
   ExcalidrawArrowElement,

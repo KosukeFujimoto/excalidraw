@@ -4,28 +4,30 @@ import type { MarkNonNullable } from "../utility-types";
 import { assertNever } from "../utils";
 import type { Bounds } from "./bounds";
 import type {
-  ExcalidrawElement,
-  ExcalidrawTextElement,
-  ExcalidrawEmbeddableElement,
-  ExcalidrawLinearElement,
+  ExcalidrawArrowElement,
   ExcalidrawBindableElement,
-  ExcalidrawFreeDrawElement,
-  InitializedExcalidrawImageElement,
-  ExcalidrawImageElement,
-  ExcalidrawTextElementWithContainer,
-  ExcalidrawTextContainer,
-  ExcalidrawFrameElement,
-  RoundnessType,
-  ExcalidrawFrameLikeElement,
+  ExcalidrawCloudElement,
+  ExcalidrawElbowArrowElement,
+  ExcalidrawElement,
   ExcalidrawElementType,
+  ExcalidrawEmbeddableElement,
+  ExcalidrawFlowchartNodeElement,
+  ExcalidrawFrameElement,
+  ExcalidrawFrameLikeElement,
+  ExcalidrawFreeDrawElement,
   ExcalidrawIframeElement,
   ExcalidrawIframeLikeElement,
+  ExcalidrawImageElement,
+  ExcalidrawLinearElement,
   ExcalidrawMagicFrameElement,
-  ExcalidrawArrowElement,
-  ExcalidrawElbowArrowElement,
-  PointBinding,
+  ExcalidrawTextContainer,
+  ExcalidrawTextElement,
+  ExcalidrawTextElementWithContainer,
   FixedPointBinding,
-  ExcalidrawFlowchartNodeElement,
+  InitializedExcalidrawCloudElement,
+  InitializedExcalidrawImageElement,
+  PointBinding,
+  RoundnessType,
 } from "./types";
 
 export const isInitializedImageElement = (
@@ -38,6 +40,18 @@ export const isImageElement = (
   element: ExcalidrawElement | null,
 ): element is ExcalidrawImageElement => {
   return !!element && element.type === "image";
+};
+
+export const isInitializedCloudElement = (
+  element: ExcalidrawElement | null,
+): element is InitializedExcalidrawCloudElement => {
+  return !!element && element.type === "cloud" && !!element.fileId;
+};
+
+export const isCloudElement = (
+  element: ExcalidrawElement | null,
+): element is ExcalidrawCloudElement => {
+  return !!element && element.type === "cloud";
 };
 
 export const isEmbeddableElement = (
@@ -186,6 +200,7 @@ export const isRectangularElement = (
     element != null &&
     (element.type === "rectangle" ||
       element.type === "image" ||
+      element.type === "cloud" ||
       element.type === "text" ||
       element.type === "iframe" ||
       element.type === "embeddable" ||
@@ -229,6 +244,7 @@ export const isExcalidrawElement = (
     case "frame":
     case "magicframe":
     case "image":
+    case "cloud":
     case "selection": {
       return true;
     }

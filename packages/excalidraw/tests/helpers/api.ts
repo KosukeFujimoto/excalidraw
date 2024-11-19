@@ -1,27 +1,18 @@
-import type {
-  ExcalidrawElement,
-  ExcalidrawGenericElement,
-  ExcalidrawTextElement,
-  ExcalidrawLinearElement,
-  ExcalidrawFreeDrawElement,
-  ExcalidrawImageElement,
-  FileId,
-  ExcalidrawFrameElement,
-  ExcalidrawElementType,
-  ExcalidrawMagicFrameElement,
-  ExcalidrawElbowArrowElement,
-  ExcalidrawArrowElement,
-} from "../../element/types";
-import { newElement, newTextElement, newLinearElement } from "../../element";
-import { DEFAULT_VERTICAL_ALIGN, ROUNDNESS } from "../../constants";
-import { getDefaultAppState } from "../../appState";
-import { GlobalTestState, createEvent, fireEvent, act } from "../test-utils";
 import fs from "fs";
-import util from "util";
 import path from "path";
+import util from "util";
+import { point, type LocalPoint, type Radians } from "../../../math";
+import type { Action } from "../../actions/types";
+import { getDefaultAppState } from "../../appState";
+import type App from "../../components/App";
+import { createTestHook } from "../../components/App";
+import { DEFAULT_VERTICAL_ALIGN, ROUNDNESS } from "../../constants";
 import { getMimeType } from "../../data/blob";
+import { newElement, newLinearElement, newTextElement } from "../../element";
+import { mutateElement } from "../../element/mutateElement";
 import {
   newArrowElement,
+  newCloudElement,
   newEmbeddableElement,
   newFrameElement,
   newFreeDrawElement,
@@ -29,16 +20,26 @@ import {
   newImageElement,
   newMagicFrameElement,
 } from "../../element/newElement";
-import type { AppState } from "../../types";
-import { getSelectedElements } from "../../scene/selection";
 import { isLinearElementType } from "../../element/typeChecks";
+import type {
+  ExcalidrawArrowElement,
+  ExcalidrawElbowArrowElement,
+  ExcalidrawElement,
+  ExcalidrawElementType,
+  ExcalidrawFrameElement,
+  ExcalidrawFreeDrawElement,
+  ExcalidrawGenericElement,
+  ExcalidrawImageElement,
+  ExcalidrawLinearElement,
+  ExcalidrawMagicFrameElement,
+  ExcalidrawTextElement,
+  FileId,
+} from "../../element/types";
+import { getSelectedElements } from "../../scene/selection";
+import type { AppState } from "../../types";
 import type { Mutable } from "../../utility-types";
 import { assertNever } from "../../utils";
-import type App from "../../components/App";
-import { createTestHook } from "../../components/App";
-import type { Action } from "../../actions/types";
-import { mutateElement } from "../../element/mutateElement";
-import { point, type LocalPoint, type Radians } from "../../../math";
+import { GlobalTestState, act, createEvent, fireEvent } from "../test-utils";
 
 const readFile = util.promisify(fs.readFile);
 // so that window.h is available when App.tsx is not imported as well.
@@ -336,6 +337,17 @@ export class API {
           scale: rest.scale || [1, 1],
         });
         break;
+      case "cloud":
+          element = newCloudElement({
+            ...base,
+            width,
+            height,
+            type,
+            fileId: (rest.fileId as string as FileId) ?? null,
+            status: rest.status || "saved",
+            scale: rest.scale || [1, 1],
+          });
+          break;
       case "frame":
         element = newFrameElement({ ...base, width, height });
         break;
