@@ -20,7 +20,6 @@ import {
 import {
   ArrowIcon,
   CloudIcon,
-  DiamondIcon,
   EraserIcon,
   ImageIcon,
   LineIcon,
@@ -64,13 +63,6 @@ export const SHAPES = [
     value: "rectangle",
     key: KEYS.R,
     numericKey: KEYS["2"],
-    fillable: true,
-  },
-  {
-    icon: DiamondIcon,
-    value: "diamond",
-    key: KEYS.D,
-    numericKey: KEYS["3"],
     fillable: true,
   },
   {
