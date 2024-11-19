@@ -2,7 +2,6 @@ import {
   FontFamilyCodeIcon,
   FontFamilyHeadingIcon,
   FontFamilyNormalIcon,
-  FreedrawIcon,
 } from "../components/icons";
 import { FONT_FAMILY } from "../constants";
 
@@ -32,15 +31,6 @@ export interface FontMetadata {
 }
 
 export const FONT_METADATA: Record<number, FontMetadata> = {
-  [FONT_FAMILY.Excalifont]: {
-    metrics: {
-      unitsPerEm: 1000,
-      ascender: 886,
-      descender: -374,
-      lineHeight: 1.25,
-    },
-    icon: FreedrawIcon,
-  },
   [FONT_FAMILY.Nunito]: {
     metrics: {
       unitsPerEm: 1000,
@@ -67,16 +57,6 @@ export const FONT_METADATA: Record<number, FontMetadata> = {
       lineHeight: 1.25,
     },
     icon: FontFamilyCodeIcon,
-  },
-  [FONT_FAMILY.Virgil]: {
-    metrics: {
-      unitsPerEm: 1000,
-      ascender: 886,
-      descender: -374,
-      lineHeight: 1.25,
-    },
-    icon: FreedrawIcon,
-    deprecated: true,
   },
   [FONT_FAMILY.Helvetica]: {
     metrics: {

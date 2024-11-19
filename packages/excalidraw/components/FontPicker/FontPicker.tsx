@@ -1,28 +1,18 @@
-import React, { useCallback, useMemo } from "react";
 import * as Popover from "@radix-ui/react-popover";
+import React, { useCallback, useMemo } from "react";
 
+import { FONT_FAMILY } from "../../constants";
+import type { FontFamilyValues } from "../../element/types";
+import { t } from "../../i18n";
+import { ButtonIconSelect } from "../ButtonIconSelect";
+import { ButtonSeparator } from "../ButtonSeparator";
+import { FontFamilyCodeIcon, FontFamilyNormalIcon } from "../icons";
 import { FontPickerList } from "./FontPickerList";
 import { FontPickerTrigger } from "./FontPickerTrigger";
-import { ButtonIconSelect } from "../ButtonIconSelect";
-import {
-  FontFamilyCodeIcon,
-  FontFamilyNormalIcon,
-  FreedrawIcon,
-} from "../icons";
-import { ButtonSeparator } from "../ButtonSeparator";
-import type { FontFamilyValues } from "../../element/types";
-import { FONT_FAMILY } from "../../constants";
-import { t } from "../../i18n";
 
 import "./FontPicker.scss";
 
 export const DEFAULT_FONTS = [
-  {
-    value: FONT_FAMILY.Excalifont,
-    icon: FreedrawIcon,
-    text: t("labels.handDrawn"),
-    testId: "font-family-handrawn",
-  },
   {
     value: FONT_FAMILY.Nunito,
     icon: FontFamilyNormalIcon,

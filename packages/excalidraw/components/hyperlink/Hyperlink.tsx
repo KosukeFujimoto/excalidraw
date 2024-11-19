@@ -1,20 +1,18 @@
-import type { AppState, ExcalidrawProps, UIAppState } from "../../types";
-import {
-  sceneCoordsToViewportCoords,
-  viewportCoordsToSceneCoords,
-  wrapEvent,
-} from "../../utils";
-import { getEmbedLink, embeddableURLValidator } from "../../element/embeddable";
+import { embeddableURLValidator, getEmbedLink } from "../../element/embeddable";
 import { mutateElement } from "../../element/mutateElement";
 import type {
   ElementsMap,
   ExcalidrawEmbeddableElement,
   NonDeletedExcalidrawElement,
 } from "../../element/types";
+import type { AppState, ExcalidrawProps, UIAppState } from "../../types";
+import {
+  sceneCoordsToViewportCoords,
+  viewportCoordsToSceneCoords,
+  wrapEvent,
+} from "../../utils";
 
-import { ToolButton } from "../ToolButton";
-import { FreedrawIcon, TrashIcon } from "../icons";
-import { t } from "../../i18n";
+import clsx from "clsx";
 import {
   useCallback,
   useEffect,
@@ -22,21 +20,23 @@ import {
   useRef,
   useState,
 } from "react";
-import clsx from "clsx";
-import { KEYS } from "../../keys";
-import { EVENT, HYPERLINK_TOOLTIP_DELAY } from "../../constants";
-import { getElementAbsoluteCoords } from "../../element/bounds";
 import { getTooltipDiv, updateTooltipPosition } from "../../components/Tooltip";
-import { getSelectedElements } from "../../scene";
-import { hitElementBoundingBox } from "../../element/collision";
+import { EVENT, HYPERLINK_TOOLTIP_DELAY } from "../../constants";
 import { isLocalLink, normalizeLink } from "../../data/url";
+import { getElementAbsoluteCoords } from "../../element/bounds";
+import { hitElementBoundingBox } from "../../element/collision";
+import { t } from "../../i18n";
+import { KEYS } from "../../keys";
+import { getSelectedElements } from "../../scene";
+import { ToolButton } from "../ToolButton";
+import { TrashIcon } from "../icons";
 
-import "./Hyperlink.scss";
-import { trackEvent } from "../../analytics";
-import { useAppProps, useExcalidrawAppState } from "../App";
-import { isEmbeddableElement } from "../../element/typeChecks";
-import { getLinkHandleFromCoords } from "./helpers";
 import { point, type GlobalPoint } from "../../../math";
+import { trackEvent } from "../../analytics";
+import { isEmbeddableElement } from "../../element/typeChecks";
+import { useAppProps, useExcalidrawAppState } from "../App";
+import "./Hyperlink.scss";
+import { getLinkHandleFromCoords } from "./helpers";
 
 const CONTAINER_WIDTH = 320;
 const SPACE_BOTTOM = 85;
@@ -291,17 +291,6 @@ export const Hyperlink = ({
         </div>
       )}
       <div className="excalidraw-hyperlinkContainer__buttons">
-        {!isEditing && (
-          <ToolButton
-            type="button"
-            title={t("buttons.edit")}
-            aria-label={t("buttons.edit")}
-            label={t("buttons.edit")}
-            onClick={onEdit}
-            className="excalidraw-hyperlinkContainer--edit"
-            icon={FreedrawIcon}
-          />
-        )}
         {linkVal && !isEmbeddableElement(element) && (
           <ToolButton
             type="button"

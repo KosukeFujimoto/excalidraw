@@ -22,7 +22,6 @@ import {
   CloudIcon,
   DiamondIcon,
   EraserIcon,
-  FreedrawIcon,
   ImageIcon,
   LineIcon,
   RectangleIcon,
@@ -89,13 +88,6 @@ export const SHAPES = [
     fillable: true,
   },
   {
-    icon: FreedrawIcon,
-    value: "freedraw",
-    key: [KEYS.P, KEYS.X],
-    numericKey: KEYS["7"],
-    fillable: false,
-  },
-  {
     icon: TextIcon,
     value: "text",
     key: KEYS.T,
@@ -128,13 +120,7 @@ export const SHAPES = [
 
 export const findShapeByKey = (key: string) => {
   const shape = SHAPES.find((shape, index) => {
-    return (
-      (shape.numericKey != null && key === shape.numericKey.toString()) ||
-      (shape.key &&
-        (typeof shape.key === "string"
-          ? shape.key === key
-          : (shape.key as readonly string[]).includes(key)))
-    );
+    return shape.numericKey != null && key === shape.numericKey.toString();
   });
   return shape?.value || null;
 };
