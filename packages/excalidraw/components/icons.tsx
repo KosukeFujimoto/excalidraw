@@ -293,12 +293,6 @@ export const ArrowIcon = createIcon(
   tablerIconProps,
 );
 
-// custom?
-export const LineIcon = createIcon(
-  <path d="M4.167 10h11.666" strokeWidth="1.5" />,
-  modifiedTablerIconProps,
-);
-
 export const PenModeIcon = createIcon(
   <g strokeWidth="1.25">
     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
