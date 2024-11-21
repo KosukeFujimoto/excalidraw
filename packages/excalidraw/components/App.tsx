@@ -1692,6 +1692,7 @@ class App extends React.Component<AppProps, AppState> {
                           }}
                         />
                         {this.state.newElement && (
+                          // 新しい要素を追加
                           <NewElementCanvas
                             appState={this.state}
                             scale={window.devicePixelRatio}
@@ -4508,6 +4509,9 @@ class App extends React.Component<AppProps, AppState> {
         insertOnCanvasDirectly:
           (tool.type === "image" && tool.insertOnCanvasDirectly) ?? false,
       });
+    }
+    if (nextActiveTool.type === "cloud") {
+      console.log("nextActiveTool","cloud");
     }
 
     this.setState((prevState) => {

@@ -773,6 +773,7 @@ export const renderElement = (
     case "arrow":
     case "image":
     case "cloud":
+      console.log(element, renderConfig);
     case "text":
     case "iframe":
     case "embeddable": {
