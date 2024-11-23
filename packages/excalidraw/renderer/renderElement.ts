@@ -773,13 +773,13 @@ export const renderElement = (
     case "arrow":
     case "image":
     case "cloud":
-      console.log(element, renderConfig);
     case "text":
     case "iframe":
     case "embeddable": {
       // TODO investigate if we can do this in situ. Right now we need to call
       // beforehand because math helpers (such as getElementAbsoluteCoords)
       // rely on existing shapes
+      // console.log(element, renderConfig);
       ShapeCache.generateElementShape(element, renderConfig);
       if (renderConfig.isExporting) {
         const [x1, y1, x2, y2] = getElementAbsoluteCoords(element, elementsMap);
