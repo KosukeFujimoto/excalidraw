@@ -2,7 +2,7 @@ import { getSelectedElements } from "../scene";
 import type { UIAppState } from "../types";
 import type { NonDeletedExcalidrawElement } from "./types";
 
-export const showSelectedShapeActions = (
+export const showArchitectureComponentList = (
   appState: UIAppState,
   elements: readonly NonDeletedExcalidrawElement[],
 ) =>
@@ -14,6 +14,6 @@ export const showSelectedShapeActions = (
             appState.activeTool.type !== "eraser" &&
             appState.activeTool.type !== "hand" &&
             appState.activeTool.type !== "laser" &&
-            appState.activeTool.type !== "cloud"))) ||
+            appState.activeTool.type === "cloud"))) ||
         getSelectedElements(elements, appState).length),
   );

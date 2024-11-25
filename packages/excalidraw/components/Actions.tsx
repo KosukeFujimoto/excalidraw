@@ -87,6 +87,175 @@ export const canChangeBackgroundColor = (
 };
 
 //TODO: Modify this for custom Action for Architecture
+export const ComponentList = ({
+  appState,
+  elementsMap,
+  renderAction,
+}: {
+  appState: UIAppState;
+  elementsMap: NonDeletedElementsMap | NonDeletedSceneElementsMap;
+  renderAction: ActionManager["renderAction"];
+}) => {
+  const targetElements = getTargetElements(elementsMap, appState);
+
+  let isSingleElementBoundContainer = false;
+  if (
+    targetElements.length === 2 &&
+    (hasBoundTextElement(targetElements[0]) ||
+      hasBoundTextElement(targetElements[1]))
+  ) {
+    isSingleElementBoundContainer = true;
+  }
+  const isEditingTextOrNewElement = Boolean(
+    appState.editingTextElement || appState.newElement,
+  );
+  const device = useDevice();
+  const isRTL = document.documentElement.getAttribute("dir") === "rtl";
+
+  const showFillIcons =
+    (hasBackground(appState.activeTool.type) &&
+      !isTransparent(appState.currentItemBackgroundColor)) ||
+    targetElements.some(
+      (element) =>
+        hasBackground(element.type) && !isTransparent(element.backgroundColor),
+    );
+
+  const showLinkIcon =
+    targetElements.length === 1 || isSingleElementBoundContainer;
+
+  const showLineEditorAction =
+    !appState.editingLinearElement &&
+    targetElements.length === 1 &&
+    isLinearElement(targetElements[0]) &&
+    !isElbowArrow(targetElements[0]);
+
+  return (
+    <div className="panelColumn">
+      <div>
+        {canChangeStrokeColor(appState, targetElements) &&
+          renderAction("changeStrokeColor")}
+      </div>
+      {canChangeBackgroundColor(appState, targetElements) && (
+        <div>{renderAction("changeBackgroundColor")}</div>
+      )}
+      {showFillIcons && renderAction("changeFillStyle")}
+
+      {(hasStrokeWidth(appState.activeTool.type) ||
+        targetElements.some((element) => hasStrokeWidth(element.type))) &&
+        renderAction("changeStrokeWidth")}
+
+      {(appState.activeTool.type === "freedraw" ||
+        targetElements.some((element) => element.type === "freedraw")) &&
+        renderAction("changeStrokeShape")}
+
+      {(hasStrokeStyle(appState.activeTool.type) ||
+        targetElements.some((element) => hasStrokeStyle(element.type))) && (
+        <>
+          {renderAction("changeStrokeStyle")}
+          {renderAction("changeSloppiness")}
+        </>
+      )}
+
+      {(canChangeRoundness(appState.activeTool.type) ||
+        targetElements.some((element) => canChangeRoundness(element.type))) && (
+        <>{renderAction("changeRoundness")}</>
+      )}
+
+      {(toolIsArrow(appState.activeTool.type) ||
+        targetElements.some((element) => toolIsArrow(element.type))) && (
+        <>{renderAction("changeArrowType")}</>
+      )}
+
+      {(appState.activeTool.type === "text" ||
+        targetElements.some(isTextElement)) && (
+        <>
+          {renderAction("changeFontFamily")}
+          {renderAction("changeFontSize")}
+          {(appState.activeTool.type === "text" ||
+            suppportsHorizontalAlign(targetElements, elementsMap)) &&
+            renderAction("changeTextAlign")}
+        </>
+      )}
+
+      {shouldAllowVerticalAlign(targetElements, elementsMap) &&
+        renderAction("changeVerticalAlign")}
+      {(canHaveArrowheads(appState.activeTool.type) ||
+        targetElements.some((element) => canHaveArrowheads(element.type))) && (
+        <>{renderAction("changeArrowhead")}</>
+      )}
+
+      {renderAction("changeOpacity")}
+
+      <fieldset>
+        <legend>{t("labels.layers")}</legend>
+        <div className="buttonList">
+          {renderAction("sendToBack")}
+          {renderAction("sendBackward")}
+          {renderAction("bringForward")}
+          {renderAction("bringToFront")}
+        </div>
+      </fieldset>
+
+      {targetElements.length > 1 && !isSingleElementBoundContainer && (
+        <fieldset>
+          <legend>{t("labels.align")}</legend>
+          <div className="buttonList">
+            {
+              // swap this order for RTL so the button positions always match their action
+              // (i.e. the leftmost button aligns left)
+            }
+            {isRTL ? (
+              <>
+                {renderAction("alignRight")}
+                {renderAction("alignHorizontallyCentered")}
+                {renderAction("alignLeft")}
+              </>
+            ) : (
+              <>
+                {renderAction("alignLeft")}
+                {renderAction("alignHorizontallyCentered")}
+                {renderAction("alignRight")}
+              </>
+            )}
+            {targetElements.length > 2 &&
+              renderAction("distributeHorizontally")}
+            {/* breaks the row ˇˇ */}
+            <div style={{ flexBasis: "100%", height: 0 }} />
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: ".5rem",
+                marginTop: "-0.5rem",
+              }}
+            >
+              {renderAction("alignTop")}
+              {renderAction("alignVerticallyCentered")}
+              {renderAction("alignBottom")}
+              {targetElements.length > 2 &&
+                renderAction("distributeVertically")}
+            </div>
+          </div>
+        </fieldset>
+      )}
+      {!isEditingTextOrNewElement && targetElements.length > 0 && (
+        <fieldset>
+          <legend>{t("labels.actions")}</legend>
+          <div className="buttonList">
+            {!device.editor.isMobile && renderAction("duplicateSelection")}
+            {!device.editor.isMobile && renderAction("deleteSelectedElements")}
+            {renderAction("group")}
+            {renderAction("ungroup")}
+            {showLinkIcon && renderAction("hyperlink")}
+            {showLineEditorAction && renderAction("toggleLinearEditor")}
+          </div>
+        </fieldset>
+      )}
+    </div>
+  );
+};
+
+//TODO: Remove this when Architecture List is completed
 export const SelectedShapeActions = ({
   appState,
   elementsMap,

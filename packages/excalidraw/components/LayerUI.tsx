@@ -31,7 +31,7 @@ import type {
   UIAppState,
 } from "../types";
 import { capitalizeString, isShallowEqual } from "../utils";
-import { SelectedShapeActions, ShapesSwitcher } from "./Actions";
+import { ComponentList, SelectedShapeActions, ShapesSwitcher } from "./Actions";
 import { ActiveConfirmDialog } from "./ActiveConfirmDialog";
 import { useDevice } from "./App";
 import { DefaultSidebar } from "./DefaultSidebar";
@@ -61,6 +61,7 @@ import { Stats } from "./Stats";
 import { TTDDialog } from "./TTDDialog/TTDDialog";
 import { UserList } from "./UserList";
 
+import { showArchitectureComponentList } from "../element/showArchitectureComponentList";
 import "./LayerUI.scss";
 import "./Toolbar.scss";
 
@@ -224,8 +225,39 @@ const LayerUI = ({
     </Section>
   );
 
+  //TODO: Imitate this function for cloud Arhictecure
+  const renderArchitectureComponentList = () => (
+    <Section
+      heading="selectedShapeActions"
+      className={clsx("selected-shape-actions zen-mode-transition", {
+        "transition-left": appState.zenModeEnabled,
+      })}
+    >
+      <Island
+        className={CLASSES.SHAPE_ACTIONS_MENU}
+        padding={2}
+        style={{
+          // we want to make sure this doesn't overflow so subtracting the
+          // approximate height of hamburgerMenu + footer
+          maxHeight: `${appState.height - 166}px`,
+        }}
+      >
+        <ComponentList
+          appState={appState}
+          elementsMap={app.scene.getNonDeletedElementsMap()}
+          renderAction={actionManager.renderAction}
+        />
+      </Island>
+    </Section>
+  );
+
   const renderFixedSideContainer = () => {
     const shouldRenderSelectedShapeActions = showSelectedShapeActions(
+      appState,
+      elements,
+    );
+
+    const shouldRenderArchitectureComponentList = showArchitectureComponentList(
       appState,
       elements,
     );
@@ -241,6 +273,8 @@ const LayerUI = ({
           <Stack.Col gap={6} className={clsx("App-menu_top__left")}>
             {renderCanvasActions()}
             {shouldRenderSelectedShapeActions && renderSelectedShapeActions()}
+            {shouldRenderArchitectureComponentList &&
+              renderArchitectureComponentList()}
           </Stack.Col>
           {!appState.viewModeEnabled && (
             <Section heading="shapes" className="shapes-section">
