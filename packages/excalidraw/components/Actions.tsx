@@ -96,6 +96,7 @@ export const ComponentList = ({
   elementsMap: NonDeletedElementsMap | NonDeletedSceneElementsMap;
   renderAction: ActionManager["renderAction"];
 }) => {
+  // TODO: remove this
   const targetElements = getTargetElements(elementsMap, appState);
 
   let isSingleElementBoundContainer = false;
@@ -131,61 +132,12 @@ export const ComponentList = ({
 
   return (
     <div className="panelColumn">
+      {/* Add Architecture Components here */}
+      <div>AWS</div>
       <div>
         {canChangeStrokeColor(appState, targetElements) &&
           renderAction("changeStrokeColor")}
       </div>
-      {canChangeBackgroundColor(appState, targetElements) && (
-        <div>{renderAction("changeBackgroundColor")}</div>
-      )}
-      {showFillIcons && renderAction("changeFillStyle")}
-
-      {(hasStrokeWidth(appState.activeTool.type) ||
-        targetElements.some((element) => hasStrokeWidth(element.type))) &&
-        renderAction("changeStrokeWidth")}
-
-      {(appState.activeTool.type === "freedraw" ||
-        targetElements.some((element) => element.type === "freedraw")) &&
-        renderAction("changeStrokeShape")}
-
-      {(hasStrokeStyle(appState.activeTool.type) ||
-        targetElements.some((element) => hasStrokeStyle(element.type))) && (
-        <>
-          {renderAction("changeStrokeStyle")}
-          {renderAction("changeSloppiness")}
-        </>
-      )}
-
-      {(canChangeRoundness(appState.activeTool.type) ||
-        targetElements.some((element) => canChangeRoundness(element.type))) && (
-        <>{renderAction("changeRoundness")}</>
-      )}
-
-      {(toolIsArrow(appState.activeTool.type) ||
-        targetElements.some((element) => toolIsArrow(element.type))) && (
-        <>{renderAction("changeArrowType")}</>
-      )}
-
-      {(appState.activeTool.type === "text" ||
-        targetElements.some(isTextElement)) && (
-        <>
-          {renderAction("changeFontFamily")}
-          {renderAction("changeFontSize")}
-          {(appState.activeTool.type === "text" ||
-            suppportsHorizontalAlign(targetElements, elementsMap)) &&
-            renderAction("changeTextAlign")}
-        </>
-      )}
-
-      {shouldAllowVerticalAlign(targetElements, elementsMap) &&
-        renderAction("changeVerticalAlign")}
-      {(canHaveArrowheads(appState.activeTool.type) ||
-        targetElements.some((element) => canHaveArrowheads(element.type))) && (
-        <>{renderAction("changeArrowhead")}</>
-      )}
-
-      {renderAction("changeOpacity")}
-
       <fieldset>
         <legend>{t("labels.layers")}</legend>
         <div className="buttonList">

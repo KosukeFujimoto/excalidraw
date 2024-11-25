@@ -1,19 +1,19 @@
 import React from "react";
-import type {
-  Action,
-  UpdaterFn,
-  ActionName,
-  ActionResult,
-  PanelComponentProps,
-  ActionSource,
-} from "./types";
+import { trackEvent } from "../analytics";
 import type {
   ExcalidrawElement,
   OrderedExcalidrawElement,
 } from "../element/types";
 import type { AppClassProperties, AppState } from "../types";
-import { trackEvent } from "../analytics";
 import { isPromiseLike } from "../utils";
+import type {
+  Action,
+  ActionName,
+  ActionResult,
+  ActionSource,
+  PanelComponentProps,
+  UpdaterFn,
+} from "./types";
 
 const trackAction = (
   action: Action,
@@ -43,6 +43,7 @@ const trackAction = (
   }
 };
 
+//TODO: create a instance of this class
 export class Architecture {
   actions = {} as Record<ActionName, Action>;
 
@@ -139,7 +140,7 @@ export class Architecture {
   /**
    * @param data additional data sent to the PanelComponent
    */
-  renderAction = (name: ActionName, data?: PanelComponentProps["data"]) => {
+  renderComponent = (name: ActionName, data?: PanelComponentProps["data"]) => {
     const canvasActions = this.app.props.UIOptions.canvasActions;
 
     if (
