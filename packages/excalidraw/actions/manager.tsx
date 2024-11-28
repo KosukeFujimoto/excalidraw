@@ -1,19 +1,21 @@
 import React from "react";
-import type {
-  Action,
-  UpdaterFn,
-  ActionName,
-  ActionResult,
-  PanelComponentProps,
-  ActionSource,
-} from "./types";
+import { trackEvent } from "../analytics";
 import type {
   ExcalidrawElement,
   OrderedExcalidrawElement,
 } from "../element/types";
 import type { AppClassProperties, AppState } from "../types";
-import { trackEvent } from "../analytics";
 import { isPromiseLike } from "../utils";
+import type {
+  Action,
+  ActionName,
+  ActionResult,
+  ActionSource,
+  Component,
+  ComponentName,
+  PanelComponentProps,
+  UpdaterFn,
+} from "./types";
 
 const trackAction = (
   action: Action,
@@ -43,9 +45,37 @@ const trackAction = (
   }
 };
 
+const trackComponent = (
+  component: Component,
+  source: ActionSource,
+  appState: Readonly<AppState>,
+  elements: readonly ExcalidrawElement[],
+  app: AppClassProperties,
+  value: any,
+) => {
+  if (component.trackEvent) {
+    try {
+      if (typeof component.trackEvent === "object") {
+        const shouldTrack = component.trackEvent.predicate
+          ? component.trackEvent.predicate(appState, elements, value)
+          : true;
+        if (shouldTrack) {
+          trackEvent(
+            component.trackEvent.category,
+            component.trackEvent.component || component.name,
+            `${source} (${app.device.editor.isMobile ? "mobile" : "desktop"})`,
+          );
+        }
+      }
+    } catch (error) {
+      console.error("error while logging component:", error);
+    }
+  }
+};
+
 export class ActionManager {
   actions = {} as Record<ActionName, Action>;
-
+  components = {} as Record<ComponentName, Component>;
   updater: (actionResult: ActionResult | Promise<ActionResult>) => void;
 
   getAppState: () => Readonly<AppState>;
@@ -74,6 +104,10 @@ export class ActionManager {
 
   registerAction(action: Action) {
     this.actions[action.name] = action;
+  }
+
+  registerComponent(component: Component) {
+    this.components[component.name] = component;
   }
 
   registerAll(actions: readonly Action[]) {
@@ -135,6 +169,62 @@ export class ActionManager {
 
     this.updater(action.perform(elements, appState, value, this.app));
   }
+
+  /**
+   * @param data additional data sent to the PanelComponent
+   */
+  renderComponent = (
+    name: ComponentName,
+    data?: PanelComponentProps["data"],
+  ) => {
+    const canvasActions = this.app.props.UIOptions.canvasActions;
+
+    if (
+      this.components[name] &&
+      "PanelComponent" in this.components[name] &&
+      (name in canvasActions
+        ? canvasActions[name as keyof typeof canvasActions]
+        : true)
+    ) {
+      const component = this.components[name];
+      const PanelComponent = component.PanelComponent!;
+      PanelComponent.displayName = "PanelComponent";
+      const elements = this.getElementsIncludingDeleted();
+      const appState = this.getAppState();
+      const updateData = (formState?: any) => {
+        trackComponent(
+          component,
+          "ui",
+          appState,
+          elements,
+          this.app,
+          formState,
+        );
+
+        this.updater(
+          component.perform(
+            this.getElementsIncludingDeleted(),
+            this.getAppState(),
+            formState,
+            this.app,
+          ),
+        );
+      };
+
+      return (
+        <PanelComponent
+          elements={this.getElementsIncludingDeleted()}
+          appState={this.getAppState()}
+          updateData={updateData}
+          appProps={this.app.props}
+          app={this.app}
+          data={data}
+        />
+      );
+    }
+
+    return null;
+  };
 
   /**
    * @param data additional data sent to the PanelComponent

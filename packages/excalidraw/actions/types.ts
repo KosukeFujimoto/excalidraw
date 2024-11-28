@@ -3,15 +3,15 @@ import type {
   ExcalidrawElement,
   OrderedExcalidrawElement,
 } from "../element/types";
+import type { StoreActionType } from "../store";
 import type {
   AppClassProperties,
   AppState,
-  ExcalidrawProps,
   BinaryFiles,
+  ExcalidrawProps,
   UIAppState,
 } from "../types";
 import type { MarkOptional } from "../utility-types";
-import type { StoreActionType } from "../store";
 
 export type ActionSource =
   | "ui"
@@ -140,6 +140,8 @@ export type ActionName =
   | "elementStats"
   | "searchMenu";
 
+export type ComponentName = "s3" | "amplify";
+
 export type PanelComponentProps = {
   elements: readonly ExcalidrawElement[];
   appState: AppState;
@@ -195,6 +197,63 @@ export interface Action {
           | "hyperlink"
           | "search_menu";
         action?: string;
+        predicate?: (
+          appState: Readonly<AppState>,
+          elements: readonly ExcalidrawElement[],
+          value: any,
+        ) => boolean;
+      };
+  /** if set to `true`, allow action to be performed in viewMode.
+   *  Defaults to `false` */
+  viewMode?: boolean;
+}
+
+export interface Component {
+  name: ComponentName;
+  label:
+    | string
+    | ((
+        elements: readonly ExcalidrawElement[],
+        appState: Readonly<AppState>,
+        app: AppClassProperties,
+      ) => string);
+  keywords?: string[];
+  icon?:
+    | React.ReactNode
+    | ((
+        appState: UIAppState,
+        elements: readonly ExcalidrawElement[],
+      ) => React.ReactNode);
+  PanelComponent?: React.FC<PanelComponentProps>;
+  perform: ActionFn;
+  keyPriority?: number;
+  keyTest?: (
+    event: React.KeyboardEvent | KeyboardEvent,
+    appState: AppState,
+    elements: readonly ExcalidrawElement[],
+    app: AppClassProperties,
+  ) => boolean;
+  predicate?: (
+    elements: readonly ExcalidrawElement[],
+    appState: AppState,
+    appProps: ExcalidrawProps,
+    app: AppClassProperties,
+  ) => boolean;
+  checked?: (appState: Readonly<AppState>) => boolean;
+  trackEvent:
+    | false
+    | {
+        category:
+          | "toolbar"
+          | "element"
+          | "canvas"
+          | "export"
+          | "history"
+          | "menu"
+          | "collab"
+          | "hyperlink"
+          | "search_menu";
+        component?: string;
         predicate?: (
           appState: Readonly<AppState>,
           elements: readonly ExcalidrawElement[],

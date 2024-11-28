@@ -220,6 +220,7 @@ const LayerUI = ({
           appState={appState}
           elementsMap={app.scene.getNonDeletedElementsMap()}
           renderAction={actionManager.renderAction}
+          // test
         />
       </Island>
     </Section>
@@ -245,7 +246,7 @@ const LayerUI = ({
         <ComponentList
           appState={appState}
           elementsMap={app.scene.getNonDeletedElementsMap()}
-          renderAction={actionManager.renderAction}
+          renderComponent={actionManager.renderComponent}
         />
       </Island>
     </Section>

@@ -90,11 +90,11 @@ export const canChangeBackgroundColor = (
 export const ComponentList = ({
   appState,
   elementsMap,
-  renderAction,
+  renderComponent,
 }: {
   appState: UIAppState;
   elementsMap: NonDeletedElementsMap | NonDeletedSceneElementsMap;
-  renderAction: ActionManager["renderAction"];
+  renderComponent: ActionManager["renderComponent"];
 }) => {
   // TODO: remove this
   const targetElements = getTargetElements(elementsMap, appState);
@@ -136,15 +136,15 @@ export const ComponentList = ({
       <div>AWS</div>
       <div>
         {canChangeStrokeColor(appState, targetElements) &&
-          renderAction("changeStrokeColor")}
+          renderComponent("s3")}
       </div>
       <fieldset>
         <legend>{t("labels.layers")}</legend>
         <div className="buttonList">
-          {renderAction("sendToBack")}
-          {renderAction("sendBackward")}
-          {renderAction("bringForward")}
-          {renderAction("bringToFront")}
+          {renderComponent("s3")}
+          {renderComponent("s3")}
+          {renderComponent("s3")}
+          {renderComponent("s3")}
         </div>
       </fieldset>
 
@@ -158,19 +158,18 @@ export const ComponentList = ({
             }
             {isRTL ? (
               <>
-                {renderAction("alignRight")}
-                {renderAction("alignHorizontallyCentered")}
-                {renderAction("alignLeft")}
+                {renderComponent("s3")}
+                {renderComponent("s3")}
+                {renderComponent("s3")}
               </>
             ) : (
               <>
-                {renderAction("alignLeft")}
-                {renderAction("alignHorizontallyCentered")}
-                {renderAction("alignRight")}
+                {renderComponent("s3")}
+                {renderComponent("s3")}
+                {renderComponent("s3")}
               </>
             )}
-            {targetElements.length > 2 &&
-              renderAction("distributeHorizontally")}
+            {targetElements.length > 2 && renderComponent("s3")}
             {/* breaks the row ˇˇ */}
             <div style={{ flexBasis: "100%", height: 0 }} />
             <div
@@ -181,11 +180,10 @@ export const ComponentList = ({
                 marginTop: "-0.5rem",
               }}
             >
-              {renderAction("alignTop")}
-              {renderAction("alignVerticallyCentered")}
-              {renderAction("alignBottom")}
-              {targetElements.length > 2 &&
-                renderAction("distributeVertically")}
+              {renderComponent("s3")}
+              {renderComponent("s3")}
+              {renderComponent("s3")}
+              {targetElements.length > 2 && renderComponent("s3")}
             </div>
           </div>
         </fieldset>
@@ -194,12 +192,12 @@ export const ComponentList = ({
         <fieldset>
           <legend>{t("labels.actions")}</legend>
           <div className="buttonList">
-            {!device.editor.isMobile && renderAction("duplicateSelection")}
-            {!device.editor.isMobile && renderAction("deleteSelectedElements")}
-            {renderAction("group")}
-            {renderAction("ungroup")}
-            {showLinkIcon && renderAction("hyperlink")}
-            {showLineEditorAction && renderAction("toggleLinearEditor")}
+            {!device.editor.isMobile && renderComponent("s3")}
+            {!device.editor.isMobile && renderComponent("s3")}
+            {renderComponent("s3")}
+            {renderComponent("s3")}
+            {showLinkIcon && renderComponent("s3")}
+            {showLineEditorAction && renderComponent("s3")}
           </div>
         </fieldset>
       )}
