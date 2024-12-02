@@ -540,7 +540,6 @@ const gesture: Gesture = {
   initialScale: null,
 };
 
-console.log(actions);
 class App extends React.Component<AppProps, AppState> {
   canvas: AppClassProperties["canvas"];
   interactiveCanvas: AppClassProperties["interactiveCanvas"] = null;
@@ -740,7 +739,6 @@ class App extends React.Component<AppProps, AppState> {
 
     this.fonts = new Fonts({ scene: this.scene });
     this.history = new History();
-    console.log(actions);
     this.actionManager.registerAll(actions);
     this.actionManager.registerAction(
       createUndoAction(this.history, this.store),
@@ -4525,9 +4523,6 @@ class App extends React.Component<AppProps, AppState> {
         insertOnCanvasDirectly:
           (tool.type === "image" && tool.insertOnCanvasDirectly) ?? false,
       });
-    }
-    if (nextActiveTool.type === "cloud") {
-      console.log("nextActiveTool", "cloud");
     }
 
     this.setState((prevState) => {
