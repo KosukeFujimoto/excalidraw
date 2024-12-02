@@ -96,48 +96,11 @@ export const ComponentList = ({
   elementsMap: NonDeletedElementsMap | NonDeletedSceneElementsMap;
   renderComponent: ActionManager["renderComponent"];
 }) => {
-  // TODO: remove this
-  const targetElements = getTargetElements(elementsMap, appState);
-
-  let isSingleElementBoundContainer = false;
-  if (
-    targetElements.length === 2 &&
-    (hasBoundTextElement(targetElements[0]) ||
-      hasBoundTextElement(targetElements[1]))
-  ) {
-    isSingleElementBoundContainer = true;
-  }
-  const isEditingTextOrNewElement = Boolean(
-    appState.editingTextElement || appState.newElement,
-  );
-  const device = useDevice();
-  const isRTL = document.documentElement.getAttribute("dir") === "rtl";
-
-  const showFillIcons =
-    (hasBackground(appState.activeTool.type) &&
-      !isTransparent(appState.currentItemBackgroundColor)) ||
-    targetElements.some(
-      (element) =>
-        hasBackground(element.type) && !isTransparent(element.backgroundColor),
-    );
-
-  const showLinkIcon =
-    targetElements.length === 1 || isSingleElementBoundContainer;
-
-  const showLineEditorAction =
-    !appState.editingLinearElement &&
-    targetElements.length === 1 &&
-    isLinearElement(targetElements[0]) &&
-    !isElbowArrow(targetElements[0]);
-
   return (
     <div className="panelColumn">
       {/* Add Architecture Components here */}
       <div>AWS</div>
-      <div>
-        {canChangeStrokeColor(appState, targetElements) &&
-          renderComponent("s3")}
-      </div>
+      <div>{renderComponent("s3")}</div>
       <fieldset>
         <legend>{t("labels.layers")}</legend>
         <div className="buttonList">
@@ -147,60 +110,6 @@ export const ComponentList = ({
           {renderComponent("s3")}
         </div>
       </fieldset>
-
-      {targetElements.length > 1 && !isSingleElementBoundContainer && (
-        <fieldset>
-          <legend>{t("labels.align")}</legend>
-          <div className="buttonList">
-            {
-              // swap this order for RTL so the button positions always match their action
-              // (i.e. the leftmost button aligns left)
-            }
-            {isRTL ? (
-              <>
-                {renderComponent("s3")}
-                {renderComponent("s3")}
-                {renderComponent("s3")}
-              </>
-            ) : (
-              <>
-                {renderComponent("s3")}
-                {renderComponent("s3")}
-                {renderComponent("s3")}
-              </>
-            )}
-            {targetElements.length > 2 && renderComponent("s3")}
-            {/* breaks the row ˇˇ */}
-            <div style={{ flexBasis: "100%", height: 0 }} />
-            <div
-              style={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: ".5rem",
-                marginTop: "-0.5rem",
-              }}
-            >
-              {renderComponent("s3")}
-              {renderComponent("s3")}
-              {renderComponent("s3")}
-              {targetElements.length > 2 && renderComponent("s3")}
-            </div>
-          </div>
-        </fieldset>
-      )}
-      {!isEditingTextOrNewElement && targetElements.length > 0 && (
-        <fieldset>
-          <legend>{t("labels.actions")}</legend>
-          <div className="buttonList">
-            {!device.editor.isMobile && renderComponent("s3")}
-            {!device.editor.isMobile && renderComponent("s3")}
-            {renderComponent("s3")}
-            {renderComponent("s3")}
-            {showLinkIcon && renderComponent("s3")}
-            {showLineEditorAction && renderComponent("s3")}
-          </div>
-        </fieldset>
-      )}
     </div>
   );
 };
