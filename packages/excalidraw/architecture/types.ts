@@ -13,7 +13,7 @@ import type {
 } from "../types";
 import type { MarkOptional } from "../utility-types";
 
-export type ActionSource =
+export type ComponentSource =
   | "ui"
   | "keyboard"
   | "contextMenu"
@@ -21,7 +21,7 @@ export type ActionSource =
   | "commandPalette";
 
 /** if false, the action should be prevented */
-export type ActionResult =
+export type ComponentResult =
   | {
       elements?: readonly ExcalidrawElement[] | null;
       appState?: MarkOptional<
@@ -34,113 +34,16 @@ export type ActionResult =
     }
   | false;
 
-type ActionFn = (
+type ComponentFn = (
   elements: readonly OrderedExcalidrawElement[],
   appState: Readonly<AppState>,
   formData: any,
   app: AppClassProperties,
-) => ActionResult | Promise<ActionResult>;
+) => ComponentResult | Promise<ComponentResult>;
 
-export type UpdaterFn = (res: ActionResult) => void;
-export type ActionFilterFn = (action: Action) => void;
-
-export type ActionName =
-  | "copy"
-  | "cut"
-  | "paste"
-  | "copyAsPng"
-  | "copyAsSvg"
-  | "copyText"
-  | "sendBackward"
-  | "bringForward"
-  | "sendToBack"
-  | "bringToFront"
-  | "copyStyles"
-  | "selectAll"
-  | "pasteStyles"
-  | "gridMode"
-  | "zenMode"
-  | "objectsSnapMode"
-  | "stats"
-  | "changeStrokeColor"
-  | "changeBackgroundColor"
-  | "changeFillStyle"
-  | "changeStrokeWidth"
-  | "changeStrokeShape"
-  | "changeSloppiness"
-  | "changeStrokeStyle"
-  | "changeArrowhead"
-  | "changeArrowType"
-  | "changeOpacity"
-  | "changeFontSize"
-  | "toggleCanvasMenu"
-  | "toggleEditMenu"
-  | "undo"
-  | "redo"
-  | "finalize"
-  | "changeProjectName"
-  | "changeExportBackground"
-  | "changeExportEmbedScene"
-  | "changeExportScale"
-  | "saveToActiveFile"
-  | "saveFileToDisk"
-  | "loadScene"
-  | "duplicateSelection"
-  | "deleteSelectedElements"
-  | "changeViewBackgroundColor"
-  | "clearCanvas"
-  | "zoomIn"
-  | "zoomOut"
-  | "resetZoom"
-  | "zoomToFit"
-  | "zoomToFitSelection"
-  | "zoomToFitSelectionInViewport"
-  | "changeFontFamily"
-  | "changeTextAlign"
-  | "changeVerticalAlign"
-  | "toggleFullScreen"
-  | "toggleShortcuts"
-  | "group"
-  | "ungroup"
-  | "goToCollaborator"
-  | "addToLibrary"
-  | "changeRoundness"
-  | "alignTop"
-  | "alignBottom"
-  | "alignLeft"
-  | "alignRight"
-  | "alignVerticallyCentered"
-  | "alignHorizontallyCentered"
-  | "distributeHorizontally"
-  | "distributeVertically"
-  | "flipHorizontal"
-  | "flipVertical"
-  | "viewMode"
-  | "exportWithDarkMode"
-  | "toggleTheme"
-  | "increaseFontSize"
-  | "decreaseFontSize"
-  | "unbindText"
-  | "hyperlink"
-  | "bindText"
-  | "unlockAllElements"
-  | "toggleElementLock"
-  | "toggleLinearEditor"
-  | "toggleEraserTool"
-  | "toggleHandTool"
-  | "selectAllElementsInFrame"
-  | "removeAllElementsFromFrame"
-  | "updateFrameRendering"
-  | "setFrameAsActiveTool"
-  | "setEmbeddableAsActiveTool"
-  | "createContainerFromText"
-  | "wrapTextInContainer"
-  | "commandPalette"
-  | "autoResize"
-  | "elementStats"
-  | "searchMenu";
-
-export type ArchitectureName = "s3";
+export type UpdaterFn = (res: ComponentResult) => void;
+export type ComponentFilterFn = (component: Component) => void;
+export type ComponentName = "s3";
 
 export type PanelComponentProps = {
   elements: readonly ExcalidrawElement[];
@@ -151,8 +54,8 @@ export type PanelComponentProps = {
   app: AppClassProperties;
 };
 
-export interface Action {
-  name: ActionName;
+export interface Component {
+  name: ComponentName;
   label:
     | string
     | ((
@@ -168,7 +71,7 @@ export interface Action {
         elements: readonly ExcalidrawElement[],
       ) => React.ReactNode);
   PanelComponent?: React.FC<PanelComponentProps>;
-  perform: ActionFn;
+  perform?: ComponentFn;
   keyPriority?: number;
   keyTest?: (
     event: React.KeyboardEvent | KeyboardEvent,

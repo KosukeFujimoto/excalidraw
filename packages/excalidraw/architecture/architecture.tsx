@@ -13,7 +13,7 @@ import type {
   ActionSource,
   PanelComponentProps,
   UpdaterFn,
-} from "./types";
+} from "../actions/types";
 
 const trackAction = (
   action: Action,

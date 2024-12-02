@@ -73,7 +73,13 @@ import {
   showHyperlinkTooltip,
 } from "../components/hyperlink/Hyperlink";
 import {
-  APP_NAME, ARROW_TYPE, CURSOR_TYPE, DEFAULT_COLLISION_THRESHOLD, DEFAULT_MAX_IMAGE_WIDTH_OR_HEIGHT, DEFAULT_TEXT_ALIGN, DEFAULT_VERTICAL_ALIGN,
+  APP_NAME,
+  ARROW_TYPE,
+  CURSOR_TYPE,
+  DEFAULT_COLLISION_THRESHOLD,
+  DEFAULT_MAX_IMAGE_WIDTH_OR_HEIGHT,
+  DEFAULT_TEXT_ALIGN,
+  DEFAULT_VERTICAL_ALIGN,
   DRAGGING_THRESHOLD,
   ELEMENT_SHIFT_TRANSLATE_AMOUNT,
   ELEMENT_TRANSLATE_AMOUNT,
@@ -82,21 +88,30 @@ import {
   FRAME_STYLE,
   IMAGE_MIME_TYPES,
   IMAGE_RENDER_TIMEOUT,
-  isBrave, isIOS, LINE_CONFIRM_THRESHOLD,
+  isBrave,
+  isIOS,
+  LINE_CONFIRM_THRESHOLD,
   MAX_ALLOWED_FILE_BYTES,
   MIME_TYPES,
   MQ_MAX_HEIGHT_LANDSCAPE,
   MQ_MAX_WIDTH_LANDSCAPE,
   MQ_MAX_WIDTH_PORTRAIT,
   MQ_RIGHT_SIDEBAR_MIN_WIDTH,
-  POINTER_BUTTON, POINTER_EVENTS, ROUNDNESS,
-  SCROLL_TIMEOUT, supportsResizeObserver, TAP_TWICE_TIMEOUT,
+  POINTER_BUTTON,
+  POINTER_EVENTS,
+  ROUNDNESS,
+  SCROLL_TIMEOUT,
+  supportsResizeObserver,
+  TAP_TWICE_TIMEOUT,
   TEXT_TO_CENTER_SNAP_THRESHOLD,
   THEME,
-  THEME_FILTER, TOOL_TYPE, TOUCH_CTX_MENU_TIMEOUT,
+  THEME_FILTER,
+  TOOL_TYPE,
+  TOUCH_CTX_MENU_TIMEOUT,
   VERTICAL_ALIGN,
   YOUTUBE_STATES,
-  ZOOM_STEP, type EXPORT_IMAGE_TYPES
+  ZOOM_STEP,
+  type EXPORT_IMAGE_TYPES,
 } from "../constants";
 import {
   resetCursor,
@@ -241,7 +256,7 @@ import {
   isLinearElementType,
   isMagicFrameElement,
   isTextBindableContainer,
-  isUsingAdaptiveRadius
+  isUsingAdaptiveRadius,
 } from "../element/typeChecks";
 import type {
   ExcalidrawArrowElement,
@@ -525,6 +540,7 @@ const gesture: Gesture = {
   initialScale: null,
 };
 
+console.log(actions);
 class App extends React.Component<AppProps, AppState> {
   canvas: AppClassProperties["canvas"];
   interactiveCanvas: AppClassProperties["interactiveCanvas"] = null;
@@ -724,7 +740,7 @@ class App extends React.Component<AppProps, AppState> {
 
     this.fonts = new Fonts({ scene: this.scene });
     this.history = new History();
-
+    console.log(actions);
     this.actionManager.registerAll(actions);
     this.actionManager.registerAction(
       createUndoAction(this.history, this.store),
@@ -4511,7 +4527,7 @@ class App extends React.Component<AppProps, AppState> {
       });
     }
     if (nextActiveTool.type === "cloud") {
-      console.log("nextActiveTool","cloud");
+      console.log("nextActiveTool", "cloud");
     }
 
     this.setState((prevState) => {
@@ -6236,7 +6252,10 @@ class App extends React.Component<AppProps, AppState> {
         this.state.activeTool.type,
         pointerDownState,
       );
-    } else if (this.state.activeTool.type === "image" || this.state.activeTool.type === "cloud") {
+    } else if (
+      this.state.activeTool.type === "image" ||
+      this.state.activeTool.type === "cloud"
+    ) {
       // reset image preview on pointerdown
       setCursor(this.interactiveCanvas, CURSOR_TYPE.CROSSHAIR);
 
